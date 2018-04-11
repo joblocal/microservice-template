@@ -1,0 +1,66 @@
+{
+  "name": "joblocal/microservice-template",
+  "description": "The Joblocal microservice template.",
+  "keywords": ["joblocal", "microservice", "template", "lumen"],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=7.1",
+    "laravel/lumen-framework": "^5.6",
+    "vlucas/phpdotenv": "~2.2",
+    "guzzlehttp/guzzle": "6.*",
+    "aws/aws-sdk-php-laravel": "^3",
+    "sentry/sentry-laravel": "^0.8"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "~1.6",
+    "phpunit/phpunit": "6.*",
+    "fiunchinho/phpunit-randomizer": "3.*",
+    "squizlabs/php_codesniffer": "3.*",
+    "mockery/mockery": "^0.9",
+    "brainmaestro/composer-git-hooks": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/",
+      "database/"
+    ]
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@composer run install-prepare-commit-msg-hook",
+      "vendor/bin/cghooks add --ignore-lock"
+    ],
+    "post-update-cmd": [
+      "@composer run install-prepare-commit-msg-hook",
+      "vendor/bin/cghooks update"
+    ],
+    "docker-run-app": "docker run --rm -v $PWD:/var/www joblocal/base-app:latest",
+    "docker-run-worker": "docker run --rm -v $PWD:/var/www joblocal/base-worker:latest",
+    "create-database": [
+      "@composer run docker-run-app -- php ./var/www/artisan migrate:install",
+      "@composer run docker-run-app -- php ./var/www/artisan migrate"
+    ],
+    "install-prepare-commit-msg-hook": [
+      "cp bin/prepare-commit-msg.sh .git/hooks/prepare-commit-msg",
+      "chmod a+x .git/hooks/prepare-commit-msg"
+    ],
+    "lint": "./vendor/bin/phpcs --standard=phpcs.xml --colors -p .",
+    "test": "@composer run docker-run-app -- ./var/www/vendor/bin/phpunit-randomizer -c /var/www/phpunit.xml --order rand",
+    "confirm": [
+      "@composer run lint",
+      "@composer run test"
+    ]
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": "composer run lint",
+      "pre-push": "composer run confirm"
+    }
+  }
+}

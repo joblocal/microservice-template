@@ -1,0 +1,4 @@
+.environment
+/vendor
+/database/database.sqlite
+cghooks.lock

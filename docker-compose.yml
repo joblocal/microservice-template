@@ -1,0 +1,32 @@
+version: '2'
+services:
+  app:
+    build:
+      context: ./docker/app
+    image: joblocal/base-app:latest
+    container_name: app.microservice.internal
+    volumes:
+      - "$PWD:/var/www"
+    ports:
+      - "80:80"
+    depends_on:
+      - cache
+    env_file:
+      - .environment
+  worker:
+    build:
+      context: ./docker/worker
+    image: joblocal/base-worker:latest
+    container_name: worker.microservice.internal
+    volumes:
+      - "$PWD:/var/www"
+    depends_on:
+      - cache
+    env_file:
+      - .environment
+  cache:
+    image: memcached:1.4
+    container_name: cache.microservice.internal
+    mem_limit: 200M
+    ports:
+      - "11211:11211"

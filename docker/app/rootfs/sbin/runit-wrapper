@@ -1,0 +1,17 @@
+#!/bin/sh
+
+main() {
+  export > /env
+
+  trap onterm SIGTERM SIGINT
+
+  /sbin/runsvdir-start &
+  wait "$!"
+}
+
+onterm() {
+  pkill -SIGHUP runsvdir-start
+  exit $?
+}
+
+main "$@"

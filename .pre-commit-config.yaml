@@ -1,0 +1,8 @@
+-   repo: git@github.com:joblocal/pre-commit-php.git
+    sha: d4a823303b7243092fe01be8baa4c37d6b8cac58
+    hooks:
+    -   id: php-cs
+        files: \.(php)$
+        args: ["--standard=phpcs.xml", "-p"]
+    -   id: php-unit
+        args: ["composer run php-unit"]
