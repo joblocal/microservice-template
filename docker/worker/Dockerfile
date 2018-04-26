@@ -15,6 +15,7 @@ ENV \
         php7-xml \
         php7-pdo_mysql \
         php7-pdo_sqlite \
+        php7-simplexml \
         runit \
         bash"
 
