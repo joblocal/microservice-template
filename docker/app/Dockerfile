@@ -26,7 +26,6 @@ RUN addgroup -g 1000 -S www-data && \
   adduser -u 1000 -D -S -G www-data www-data
 
 RUN apk add --update $DEPS && \
-  chown www-data:www-data /var/tmp/nginx && \
   rm -rf /var/cache/apk/*
 
 # Set Timezone to UTC and remove apk cache
