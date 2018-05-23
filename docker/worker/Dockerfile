@@ -19,18 +19,18 @@ ENV \
         runit \
         bash"
 
-RUN addgroup -g 1000 -S www-data && \
-  adduser -u 1000 -D -S -G www-data www-data
+RUN addgroup -g 1000 -S www-data \
+  && adduser -u 1000 -D -S -G www-data www-data
 
-RUN apk add --update $DEPS && \
-  rm -rf /var/cache/apk/*
+RUN apk add --update $DEPS \
+  && rm -rf /var/cache/apk/*
 
 # Set Timezone to UTC
-RUN apk add --update tzdata && \
-  cp /usr/share/zoneinfo/UTC /etc/localtime && \
-  echo "UTC" >  /etc/timezone && \
-  apk del tzdata && \
-  rm -rf /var/cache/apk/*
+RUN apk add --update tzdata \
+  && cp /usr/share/zoneinfo/UTC /etc/localtime \
+  && echo "UTC" >  /etc/timezone \
+  && apk del tzdata \
+  && rm -rf /var/cache/apk/*
 
 COPY ./rootfs /
 
