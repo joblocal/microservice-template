@@ -22,18 +22,21 @@ ENV \
         runit \
         bash"
 
-RUN addgroup -g 1000 -S www-data && \
-  adduser -u 1000 -D -S -G www-data www-data
+RUN addgroup -g 1000 -S www-data \
+  && adduser -u 1000 -D -S -G www-data www-data
 
-RUN apk add --update $DEPS && \
-  rm -rf /var/cache/apk/*
+RUN apk add --update $DEPS \
+  && rm -rf /var/cache/apk/* \
+  && ln -sf /dev/stdout /var/log/nginx/access.log \
+  && ln -sf /dev/stderr /var/log/nginx/error.log
+
 
 # Set Timezone to UTC and remove apk cache
-RUN apk add --update tzdata && \
-  cp /usr/share/zoneinfo/UTC /etc/localtime && \
-  echo "UTC" >  /etc/timezone && \
-  apk del tzdata && \
-  rm -rf /var/cache/apk/*
+RUN apk add --update tzdata \
+  && cp /usr/share/zoneinfo/UTC /etc/localtime \
+  && echo "UTC" >  /etc/timezone \
+  && apk del tzdata \
+  && rm -rf /var/cache/apk/*
 
 COPY ./rootfs /
 
