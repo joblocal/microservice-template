@@ -54,14 +54,14 @@ class Handler extends ExceptionHandler
             foreach ($e->validator->errors()->getMessages() as $field => $messages) {
                 foreach ($messages as $message) {
                     $error = [
-                        'status' => '422',
+                        'status' => (string) $statusCode,
                         'title' => 'Invalid Parameter',
                         'source' => [
                             'parameter' => $field
                         ],
                         'detail' => $message,
                     ];
-                    if (is_null($request->query(str_replace('.', '_', $field)))) {
+                    if (is_a($exception, ResourceValidationException::class)) {
                         $error['source']['pointer'] = sprintf('/data/attributes/%s', $field);
                     }
                     $errors[] = $error;

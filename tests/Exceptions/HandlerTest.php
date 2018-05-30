@@ -6,6 +6,7 @@ use App\Exceptions\Handler;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\ValidationException;
+use App\Exceptions\ResourceValidationException;
 use Tests\TestCase;
 
 class HandlerTest extends TestCase
@@ -54,7 +55,6 @@ class HandlerTest extends TestCase
                     'status' => '422',
                     'title' => 'Invalid Parameter',
                     'source' => [
-                        'pointer' => '/data/attributes/second',
                         'parameter' => 'second'
                     ],
                     'detail' => 'message 2'
@@ -63,15 +63,15 @@ class HandlerTest extends TestCase
         ], $result->getData(true));
     }
 
-    public function testRenderErrorsNestedQuery()
+    public function testRenderSourcePointer()
     {
         $validator = \Mockery::mock()
             ->shouldReceive('errors')
-            ->andReturn(new MessageBag(['nested.param' => 'message 1']))
+            ->andReturn(new MessageBag(['first' => 'message 1']))
             ->once()
             ->getMock();
         $request = new Request(['nested_param' => 'value']);
-        $exception = new ValidationException($validator);
+        $exception = new ResourceValidationException($validator);
         $handler = new Handler();
 
         $result = $handler->render($request, $exception);
@@ -82,7 +82,8 @@ class HandlerTest extends TestCase
                     'status' => '422',
                     'title' => 'Invalid Parameter',
                     'source' => [
-                        'parameter' => 'nested.param'
+                        'parameter' => 'first',
+                        'pointer' => '/data/attributes/first'
                     ],
                     'detail' => 'message 1'
                 ],
