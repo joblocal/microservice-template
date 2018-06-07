@@ -6,6 +6,7 @@ use App\Exceptions\Handler;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\ValidationException;
+use App\Exceptions\ResourceValidationException;
 use Tests\TestCase;
 
 class HandlerTest extends TestCase
@@ -32,32 +33,60 @@ class HandlerTest extends TestCase
     {
         $validator = \Mockery::mock()
             ->shouldReceive('errors')
-            ->andReturn(new MessageBag(['message 1', 'message 2']))
+            ->andReturn(new MessageBag(['first' => 'message 1', 'second' => 'message 2']))
             ->once()
             ->getMock();
         $exception = new ValidationException($validator);
-        $request = new Request();
+        $request = new Request(['first' => 'value']);
         $handler = new Handler();
 
         $result = $handler->render($request, $exception);
         $this->assertEquals([
             'errors' => [
                 [
-                    'status' => 422,
+                    'status' => '422',
                     'title' => 'Invalid Parameter',
                     'source' => [
-                        'parameter' => 0
+                        'parameter' => 'first'
                     ],
                     'detail' => 'message 1'
                 ],
                 [
-                    'status' => 422,
+                    'status' => '422',
                     'title' => 'Invalid Parameter',
                     'source' => [
-                        'parameter' => 1
+                        'parameter' => 'second'
                     ],
                     'detail' => 'message 2'
                 ]
+            ]
+        ], $result->getData(true));
+    }
+
+    public function testRenderSourcePointer()
+    {
+        $validator = \Mockery::mock()
+            ->shouldReceive('errors')
+            ->andReturn(new MessageBag(['first' => 'message 1']))
+            ->once()
+            ->getMock();
+        $request = new Request(['nested_param' => 'value']);
+        $exception = new ResourceValidationException($validator);
+        $handler = new Handler();
+
+        $result = $handler->render($request, $exception);
+
+        $this->assertEquals([
+            'errors' => [
+                [
+                    'status' => '422',
+                    'title' => 'Invalid Parameter',
+                    'source' => [
+                        'parameter' => 'first',
+                        'pointer' => '/data/attributes/first'
+                    ],
+                    'detail' => 'message 1'
+                ],
             ]
         ], $result->getData(true));
     }

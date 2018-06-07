@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\ResourceValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -29,49 +30,61 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $e
+     * @param  \Exception $exception
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Exception $exception)
     {
-        if (app()->bound('sentry') && $this->shouldReport($e)) {
-            app('sentry')->captureException($e);
+        if (app()->bound('sentry') && $this->shouldReport($exception)) {
+            app('sentry')->captureException($exception);
         }
-        parent::report($e);
+        parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $e
+     * @param  \Exception               $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Exception $exception)
     {
         $errors = [];
-        if (is_a($e, ValidationException::class)) {
-            foreach ($e->validator->errors()->getMessages() as $field => $messages) {
+        $statusCode = 500;
+
+        if (is_a($exception, ValidationException::class)) {
+            $statusCode = 422;
+
+            foreach ($exception->validator->errors()->getMessages() as $field => $messages) {
                 foreach ($messages as $message) {
-                    $errors[] = [
-                        'status' => '422',
-                        'source' => ['parameter' => $field],
+                    $error = [
+                        'status' => (string) $statusCode,
                         'title' => 'Invalid Parameter',
+                        'source' => [
+                            'parameter' => $field
+                        ],
                         'detail' => $message,
                     ];
+                    if (is_a($exception, ResourceValidationException::class)) {
+                        $error['source']['pointer'] = sprintf('/data/attributes/%s', $field);
+                    }
+                    $errors[] = $error;
                 }
             }
         } else {
-            $rendered = parent::render($request, $e);
+            $rendered = parent::render($request, $exception);
+            $statusCode = $rendered->getStatusCode();
             $errors[] = [
-                'status' => $rendered->getStatusCode(),
-                'code' => $e->getCode(),
-                'title' => $e->getMessage(),
+                'status' => $statusCode,
+                'code' => $exception->getCode(),
+                'title' => $exception->getMessage(),
             ];
         }
 
         return response()->json([
             'errors' => $errors,
-        ])->header('Content-Type', 'application/vnd.api+json');
+        ])->header('Content-Type', 'application/vnd.api+json')
+        ->setStatusCode($statusCode);
     }
 }
