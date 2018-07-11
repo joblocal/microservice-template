@@ -99,11 +99,10 @@ $app->bind('Aws\CloudWatch\CloudWatchClient', function ($app) {
 | can respond to, as well as the controllers that may handle them.
 |
 */
-
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../app/Http/routes.php';
+    require __DIR__.'/../routes/web.php';
 });
 
 $app->configure('guzzle');
