@@ -13,12 +13,12 @@
     "sentry/sentry-laravel": "^0.8"
   },
   "require-dev": {
-    "fzaninotto/faker": "~1.6",
-    "phpunit/phpunit": "6.*",
-    "fiunchinho/phpunit-randomizer": "3.*",
-    "squizlabs/php_codesniffer": "3.*",
-    "mockery/mockery": "^0.9",
-    "brainmaestro/composer-git-hooks": "^2.3"
+    "fzaninotto/faker": "^1.7",
+    "phpunit/phpunit": "^7",
+    "fiunchinho/phpunit-randomizer": "^4.0",
+    "squizlabs/php_codesniffer": "^3.3",
+    "mockery/mockery": "^1.1",
+    "brainmaestro/composer-git-hooks": "^2.4"
   },
   "autoload": {
     "psr-4": {
