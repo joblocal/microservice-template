@@ -84,11 +84,6 @@ $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\GuzzleServiceProvider::class);
 $app->register(Sentry\SentryLaravel\SentryLumenServiceProvider::class);
 
-$app->bind('Aws\CloudWatch\CloudWatchClient', function ($app) {
-    return $app->make('aws')->createCloudWatch();
-});
-
-
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
