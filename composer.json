@@ -6,7 +6,7 @@
   "type": "project",
   "require": {
     "php": ">=7.1",
-    "laravel/lumen-framework": "^5.6",
+    "laravel/lumen-framework": "5.7.*",
     "vlucas/phpdotenv": "~2.2",
     "guzzlehttp/guzzle": "6.*",
     "aws/aws-sdk-php-laravel": "^3",
@@ -14,8 +14,7 @@
   },
   "require-dev": {
     "fzaninotto/faker": "~1.6",
-    "phpunit/phpunit": "6.*",
-    "fiunchinho/phpunit-randomizer": "3.*",
+    "phpunit/phpunit": "^7.3",
     "squizlabs/php_codesniffer": "3.*",
     "mockery/mockery": "^0.9",
     "brainmaestro/composer-git-hooks": "^2.3"
@@ -51,7 +50,7 @@
       "chmod a+x .git/hooks/prepare-commit-msg"
     ],
     "lint": "./vendor/bin/phpcs --standard=phpcs.xml --colors -p .",
-    "test": "@composer run docker-run-app -- ./var/www/vendor/bin/phpunit-randomizer -c /var/www/phpunit.xml --order rand",
+    "test": "@composer run docker-run-app -- ./var/www/vendor/bin/phpunit -c ./var/www/phpunit.xml --order-by random",
     "confirm": [
       "@composer run lint",
       "@composer run test"
