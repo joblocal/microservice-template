@@ -52,7 +52,7 @@
     ],
     "lint": "./vendor/bin/phpcs --standard=phpcs.xml --colors -p .",
     "test": "@composer run docker-run-app -- ./var/www/vendor/bin/phpunit -c ./var/www/phpunit.xml --order-by random",
-    "test:watch": "phpunit-watcher watch",
+    "test:watch": "vendor/bin/phpunit-watcher watch",
     "confirm": [
       "@composer run lint",
       "@composer run test"
