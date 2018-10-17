@@ -17,7 +17,8 @@
     "phpunit/phpunit": "^7.3",
     "squizlabs/php_codesniffer": "3.*",
     "mockery/mockery": "^0.9",
-    "brainmaestro/composer-git-hooks": "^2.3"
+    "brainmaestro/composer-git-hooks": "^2.3",
+    "spatie/phpunit-watcher": "^1.6"
   },
   "autoload": {
     "psr-4": {
@@ -51,6 +52,7 @@
     ],
     "lint": "./vendor/bin/phpcs --standard=phpcs.xml --colors -p .",
     "test": "@composer run docker-run-app -- ./var/www/vendor/bin/phpunit -c ./var/www/phpunit.xml --order-by random",
+    "test:watch": "phpunit-watcher watch",
     "confirm": [
       "@composer run lint",
       "@composer run test"
