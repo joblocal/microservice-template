@@ -1,5 +1,7 @@
 <?php
 
+use Monolog\Handler\StreamHandler;
+
 return [
 
     /*
@@ -13,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'stdout'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,19 +32,12 @@ return [
     */
 
     'channels' => [
-        'stack' => [
-            'driver' => 'stack',
-            'channels' => ['syslog', 'errorlog'],
-        ],
-
-        'syslog' => [
-            'driver' => 'syslog',
-            'level' => 'notice',
-        ],
-
-        'errorlog' => [
-            'driver' => 'errorlog',
-            'level' => 'error',
+        'stdout' => [
+           'driver'  => 'monolog',
+           'handler' => StreamHandler::class,
+           'with'    => [
+               'stream' => 'php://stdout',
+           ],
         ],
     ],
 
