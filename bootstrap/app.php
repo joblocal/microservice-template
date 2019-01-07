@@ -98,7 +98,7 @@ $app->register(Sentry\SentryLaravel\SentryLumenServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../app/Http/routes.php';
+    require __DIR__.'/../routes/web.php';
 });
 
 $app->configure('guzzle');
