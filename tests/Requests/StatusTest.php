@@ -4,14 +4,14 @@ namespace Tests\Requests;
 
 use Tests\TestCase;
 
-class PingTest extends TestCase
+class StatusTest extends TestCase
 {
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->get('/ping');
+        $this->get('/v4/status');
     }
 
     public function testStatusCode()
@@ -26,6 +26,6 @@ class PingTest extends TestCase
 
     public function testResponseBody()
     {
-        $this->assertEquals(json_encode(['message' => 'pong']), $this->response->content());
+        $this->assertEquals(json_encode(['message' => 'alive']), $this->response->content());
     }
 }
