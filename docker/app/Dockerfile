@@ -1,1 +1,1 @@
-FROM joblocal/base-app:alpine-3.7
+FROM joblocal/base-app:alpine-3.9
