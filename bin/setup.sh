@@ -20,6 +20,8 @@ composer install
 
 docker-compose up -d
 
+sleep 8
+
 # custom project setup tasks
 if [ ! -f database/database.sqlite ]; then
     composer run create-database
