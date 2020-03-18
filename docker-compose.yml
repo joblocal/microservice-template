@@ -5,6 +5,7 @@ services:
       context: ./docker/app
     image: joblocal/base-app:latest
     container_name: app.microservice.internal
+    working_dir: /var/www
     volumes:
       - "$PWD:/var/www:cached"
     ports:
@@ -18,6 +19,7 @@ services:
       context: ./docker/worker
     image: joblocal/base-worker:latest
     container_name: worker.microservice.internal
+    working_dir: /var/www
     volumes:
       - "$PWD:/var/www:cached"
     depends_on:

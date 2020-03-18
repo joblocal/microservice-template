@@ -22,10 +22,7 @@ docker-compose up -d
 
 sleep 8
 
-# custom project setup tasks
-if [ ! -f database/database.sqlite ]; then
-    composer run create-database
-fi
+composer run create-database
 
 # create a new repository?
 echo "\n"
