@@ -10,12 +10,17 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
+/** @var Registrar $router */
+
+use Illuminate\Contracts\Routing\Registrar;
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/ping', function () {
-    return response()->json(['message' => 'pong']);
+$router->get('/status', function () {
+    return response()->json(['message' => 'alive']);
 });
 
 $router->group([

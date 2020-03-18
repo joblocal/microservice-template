@@ -1,42 +1,23 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| Here you may define all of your model factories. Model factories give
-| you a convenient way to create models for testing and seeding your
-| database. Just tell the factory how a default model should look.
-|
-*/
+/** @var Factory $factory */
 
-/**
- * User factory
- */
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->name,
-        'email' => $faker->email,
-    ];
-});
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factory;
 
-/**
- * EventLog factory
- */
-$factory->define(App\Models\EventLog::class, function (Faker\Generator $faker) {
-    $event_at = $faker->iso8601();
-    $publication_id = $faker->numberBetween();
+$factory->define(App\Models\EventLog::class, function (\Faker\Generator $faker) {
+    $eventAt = Carbon::now();
+    $publicationId = $faker->numberBetween();
     $subject = $faker->randomElement(['created', 'deleted']);
 
     return [
         'payload' => json_encode([
-            'event_at' => $event_at,
-            'publication_id' => $publication_id,
+            'event_at' => $eventAt,
+            'publication_id' => $publicationId,
             'subject' => $subject,
         ]),
-        'event_at' => $event_at,
+        'event_at' => $eventAt,
         'subject' => $subject,
-        'publication_id' => $publication_id,
+        'publication_id' => $publicationId,
     ];
 });

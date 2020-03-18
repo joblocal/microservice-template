@@ -12,11 +12,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Illuminate\Queue\Events\JobFailed' => [
-            'App\Listeners\JobFailedEventListener',
-        ],
-        'Illuminate\Queue\Events\JobProcessed' => [
-            'App\Listeners\JobProcessedEventListener',
-        ],
+        //
     ];
 }

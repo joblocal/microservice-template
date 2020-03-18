@@ -2,13 +2,14 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
-use App\Exceptions\ResourceValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -30,28 +31,29 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $exception
+     * @param Throwable $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         if (app()->bound('sentry') && $this->shouldReport($exception)) {
             app('sentry')->captureException($exception);
         }
+
         parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Throwable $exception
+     * @return Response
+     * @throws Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         $errors = [];
-        $statusCode = 500;
 
         if (is_a($exception, ValidationException::class)) {
             $statusCode = 422;
@@ -59,7 +61,7 @@ class Handler extends ExceptionHandler
             foreach ($exception->validator->errors()->getMessages() as $field => $messages) {
                 foreach ($messages as $message) {
                     $error = [
-                        'status' => (string) $statusCode,
+                        'status' => (string)$statusCode,
                         'title' => 'Invalid Parameter',
                         'source' => [
                             'parameter' => $field
@@ -82,9 +84,11 @@ class Handler extends ExceptionHandler
             ];
         }
 
-        return response()->json([
-            'errors' => $errors,
-        ])->header('Content-Type', 'application/vnd.api+json')
-        ->setStatusCode($statusCode);
+        return response()
+            ->json([
+                'errors' => $errors,
+            ])
+            ->header('Content-Type', 'application/vnd.api+json')
+            ->setStatusCode($statusCode);
     }
 }

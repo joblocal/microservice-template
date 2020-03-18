@@ -12,7 +12,7 @@ services:
     depends_on:
       - cache
     env_file:
-      - .environment
+      - .env
   worker:
     build:
       context: ./docker/worker
@@ -23,7 +23,7 @@ services:
     depends_on:
       - cache
     env_file:
-      - .environment
+      - .env
   cache:
     image: memcached:1.4
     container_name: cache.microservice.internal

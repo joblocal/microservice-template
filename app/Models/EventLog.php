@@ -1,24 +1,38 @@
 <?php
 
-/**
- * @property integer $id
- * @property string  $payload
- * @property string  $publication_id
- * @property string  $subject
- * @property string  $event_at
- */
-
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Traits\Validation;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\EventLog
+ *
+ * @property integer $id
+ * @property string $payload
+ * @property-read string $publication_id
+ * @property-read string $subject
+ * @property-read string $event_at
+ * @method static Builder|EventLog newModelQuery()
+ * @method static Builder|EventLog newQuery()
+ * @method static Builder|EventLog query()
+ * @mixin Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|EventLog whereCreatedAt($value)
+ * @method static Builder|EventLog whereEventAt($value)
+ * @method static Builder|EventLog whereId($value)
+ * @method static Builder|EventLog wherePayload($value)
+ * @method static Builder|EventLog wherePublicationId($value)
+ * @method static Builder|EventLog whereSubject($value)
+ * @method static Builder|EventLog whereUpdatedAt($value)
+ */
 class EventLog extends Model
 {
-    use Validation;
-
-    const SUBJECT_CREATED = 'created';
-    const SUBJECT_DELETED = 'deleted';
+    public const SUBJECT_CREATED = 'created';
+    public const SUBJECT_DELETED = 'deleted';
 
     /**
      * The attributes that are mass assignable.
@@ -31,20 +45,6 @@ class EventLog extends Model
         'event_at',
     ];
 
-    /**
-     * Returns the validation rules
-     * @return [array] The rules for this model (see: Illuminate\Validator\Validator:setRules)
-     */
-    public function rules()
-    {
-        return [
-            'payload' => 'required|json',
-            'publication_id' => 'required',
-            'subject' => 'required|in:created,deleted',
-            'event_at' => 'required|date_format:' . \DateTime::ISO8601,
-        ];
-    }
-
     public function shouldExecute()
     {
         $lastEvent = EventLog::where('publication_id', $this->publication_id)
@@ -52,6 +52,6 @@ class EventLog extends Model
             ->orderBy('event_at', 'desc')
             ->first();
 
-        return ($lastEvent->id == $this->id);
+        return $lastEvent && $lastEvent->id === $this->id;
     }
 }
