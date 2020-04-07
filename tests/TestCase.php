@@ -6,44 +6,28 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Exception\RequestException;
-use Tests\Traits\DatabaseMigrations;
+use Laravel\Lumen\Application;
+use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 
-class TestCase extends \Laravel\Lumen\Testing\TestCase
+abstract class TestCase extends BaseTestCase
 {
     /**
      * Creates the application.
      *
-     * @return \Laravel\Lumen\Application
+     * @return Application
      */
     public function createApplication()
     {
-        return require __DIR__.'/../bootstrap/app.php';
-    }
-
-    /**
-     * Runs custom traits when they are being used
-     */
-    protected function setUpTraits()
-    {
-        parent::setUpTraits();
-
-        $uses = array_flip(class_uses_recursive(get_class($this)));
-
-        if (isset($uses[DatabaseMigrations::class])) {
-            $this->runDatabaseMigrations();
-        }
+        return require __DIR__ . '/../bootstrap/app.php';
     }
 
     /**
      * mocks the result of a remote api GET request
      */
-    protected function mockRemoteApi()
+    protected function mockRemoteApi(): void
     {
         $this->app->bind('guzzle', function () {
-
-            $jsonFilePath = dirname(__FILE__) . '/models/Remote/mocks/apiStub.json';
+            $jsonFilePath = __DIR__ . '/Models/Remote/mocks/apiStub.json';
             $jsonResponse = file_get_contents($jsonFilePath);
 
             $mock = new MockHandler([
@@ -52,9 +36,8 @@ class TestCase extends \Laravel\Lumen\Testing\TestCase
             $handler = HandlerStack::create($mock);
 
             $config = array_merge(config('guzzle'), ['handler' => $handler]);
-            $client = new Client($config);
 
-            return $client;
+            return new Client($config);
         });
     }
 
@@ -64,8 +47,8 @@ class TestCase extends \Laravel\Lumen\Testing\TestCase
      */
     protected function getStubRemoteApi()
     {
-        $jsonFilePath = dirname(__FILE__) . '/models/Remote/mocks/apiStub.json';
-        $jsonData = json_decode(file_get_contents($jsonFilePath), true);
-        return $jsonData;
+        $jsonFilePath = __DIR__ . '/Models/Remote/mocks/apiStub.json';
+
+        return json_decode(file_get_contents($jsonFilePath), true);
     }
 }

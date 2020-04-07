@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Requests\V1;
+namespace Tests\App\Requests\V1;
 
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

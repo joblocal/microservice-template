@@ -30,8 +30,8 @@ Make sure to configure the following files according to your needs:
 -   composer.json
 -   docker-compose.yml
 -   readme.md
--   .environment.example
--   .environment
+-   .env.example
+-   .env
 -   php-fpm.conf (app and worker)
 
 #### Environment Variables
@@ -40,7 +40,7 @@ passed along to php-fpm via the php-fpm.conf ```ENV[...]```.
 
 #### Sentry Error Logging
 In order to enable error logging to sentry, first go to [sentry.io](https://sentry.io) and create a new project.
-Copy the DSN and add it as  ```SENTRY_DSN``` to your .environment file.
+Copy the DSN and add it as  ```SENTRY_LARAVEL_DSN``` to your .environment file.
 
 If you don't want to use Sentry for error logging, leave the env variable empty.
 
@@ -49,7 +49,7 @@ If you don't want to use Sentry for error logging, leave the env variable empty.
 You can start listening for Messages in the Queue by running:
 
 ```sh
-php artisan queue:listen
+php artisan queue:work
 ```
 
 *make sure you run the command from within the docker app container*
@@ -64,7 +64,7 @@ You can also use the combined script by using `composer run confirm`.
 
 ## Technologies used
 
--   PHP7.1
+-   PHP 7.2
 -   [Lumen Framework Documentation](http://lumen.laravel.com/docs)
 -   [Docker](https://docs.docker.com)
 -   [Sentry](https://docs.sentry.io)

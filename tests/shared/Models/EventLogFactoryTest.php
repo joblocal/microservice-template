@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Models;
+namespace Tests\Shared\Models;
 
 use App\Models\EventLog;
-use Tests\Traits\DatabaseMigrations;
+use Laravel\Lumen\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class EventLogFactoryTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseTransactions;
 
     /**
      * A test for the event log table.
@@ -23,13 +23,5 @@ class EventLogFactoryTest extends TestCase
         $this->seeInDatabase('event_logs', [
             'publication_id' => $eventLog->publication_id,
         ]);
-    }
-
-    public function testFactoryIsValid()
-    {
-        /** @var EventLog $eventLog */
-        $eventLog = factory(EventLog::class)->make();
-
-        $this->assertTrue($eventLog->isValid());
     }
 }

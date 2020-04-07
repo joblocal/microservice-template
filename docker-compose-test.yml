@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  test-db:
+    image: mysql:5
+    tmpfs: /var/lib/mysql
+    container_name: test-db.microservice.internal
+    command: mysqld --sql_mode=""
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: microservice-test
+networks:
+  default:
+    name: microservice-test

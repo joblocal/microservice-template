@@ -5,28 +5,39 @@ services:
       context: ./docker/app
     image: joblocal/base-app:latest
     container_name: app.microservice.internal
+    working_dir: /var/www
     volumes:
-      - "$PWD:/var/www"
+      - "$PWD:/var/www:cached"
     ports:
       - "80:80"
     depends_on:
       - cache
     env_file:
-      - .environment
+      - .env
   worker:
     build:
       context: ./docker/worker
     image: joblocal/base-worker:latest
     container_name: worker.microservice.internal
+    working_dir: /var/www
     volumes:
-      - "$PWD:/var/www"
+      - "$PWD:/var/www:cached"
     depends_on:
       - cache
     env_file:
-      - .environment
+      - .env
   cache:
-    image: memcached:1.4
+    image: memcached:1.6
     container_name: cache.microservice.internal
     mem_limit: 200M
     ports:
       - "11211:11211"
+  db:
+    image: mysql:5
+    container_name: db.microservice.internal
+    command: mysqld --sql_mode=""
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: microservice

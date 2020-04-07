@@ -1,57 +1,83 @@
 {
   "name": "joblocal/microservice-template",
   "description": "The Joblocal microservice template.",
-  "keywords": ["joblocal", "microservice", "template", "lumen"],
+  "keywords": [
+    "joblocal",
+    "microservice",
+    "template",
+    "lumen"
+  ],
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=7.1",
-    "laravel/lumen-framework": "^5.6",
-    "vlucas/phpdotenv": "~2.2",
-    "guzzlehttp/guzzle": "6.*",
-    "aws/aws-sdk-php-laravel": "^3",
-    "sentry/sentry-laravel": "^0.8"
+    "php": "^7.2.5",
+    "ext-json": "*",
+    "laravel/lumen-framework": "^7.0",
+    "guzzlehttp/guzzle": "^6.5",
+    "aws/aws-sdk-php-laravel": "^3.5",
+    "sentry/sentry-laravel": "^1.7"
   },
   "require-dev": {
-    "fzaninotto/faker": "^1.7",
-    "phpunit/phpunit": "^7",
-    "fiunchinho/phpunit-randomizer": "^4.0",
-    "squizlabs/php_codesniffer": "^3.3",
-    "mockery/mockery": "^1.1",
-    "brainmaestro/composer-git-hooks": "^2.4"
+    "roave/security-advisories": "dev-master",
+    "barryvdh/laravel-ide-helper": "^2.6",
+    "brainmaestro/composer-git-hooks": "^2.8",
+    "fzaninotto/faker": "^1.9.1",
+    "league/flysystem": "^1.0",
+    "mockery/mockery": "^1.3.1",
+    "phpunit/phpunit": "^8.5",
+    "squizlabs/php_codesniffer": "^3.5"
   },
   "autoload": {
+    "classmap": [
+      "database/seeds",
+      "database/factories"
+    ],
     "psr-4": {
       "App\\": "app/"
     }
   },
   "autoload-dev": {
     "classmap": [
-      "tests/",
-      "database/"
+      "tests/"
     ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
   },
   "scripts": {
     "post-install-cmd": [
       "@composer run install-prepare-commit-msg-hook",
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
       "vendor/bin/cghooks add --ignore-lock"
     ],
     "post-update-cmd": [
       "@composer run install-prepare-commit-msg-hook",
-      "vendor/bin/cghooks update"
+      "vendor/bin/cghooks update",
+      "@php artisan ide-helper:generate",
+      "@php artisan ide-helper:meta"
     ],
+    "docker-exec-app": "docker exec -i app.microservice.internal",
     "docker-run-app": "docker run --rm -v $PWD:/var/www joblocal/base-app:latest",
     "docker-run-worker": "docker run --rm -v $PWD:/var/www joblocal/base-worker:latest",
-    "create-database": [
-      "@composer run docker-run-app -- php ./var/www/artisan migrate:install",
-      "@composer run docker-run-app -- php ./var/www/artisan migrate"
-    ],
+    "create-database": "@composer run docker-exec-app -- php artisan migrate",
     "install-prepare-commit-msg-hook": [
       "cp bin/prepare-commit-msg.sh .git/hooks/prepare-commit-msg",
       "chmod a+x .git/hooks/prepare-commit-msg"
     ],
     "lint": "./vendor/bin/phpcs --standard=phpcs.xml --colors -p .",
-    "test": "@composer run docker-run-app -- ./var/www/vendor/bin/phpunit-randomizer -c /var/www/phpunit.xml --order rand",
+    "test": [
+      "docker-compose -f docker-compose-test.yml up -d",
+      "sleep 8",
+      "@composer run test-migrate",
+      "@composer run test-app",
+      "@composer run test-worker",
+      "docker-compose -f docker-compose-test.yml stop"
+    ],
+    "test-migrate": "docker run --network container:test-db.microservice.internal --rm -v $PWD:/var/www joblocal/job-service-app:latest php artisan migrate:fresh --database=testing",
+    "test-app": "docker run --network container:test-db.microservice.internal --rm -v $PWD:/var/www joblocal/job-service-app:latest ./vendor/bin/phpunit --order-by random --testsuite app,shared",
+    "test-worker": "docker run --network container:test-db.microservice.internal --rm -v $PWD:/var/www joblocal/job-service-worker:latest ./vendor/bin/phpunit --order-by random --testsuite worker,shared",
     "confirm": [
       "@composer run lint",
       "@composer run test"

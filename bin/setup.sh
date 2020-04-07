@@ -7,23 +7,22 @@ source bin/shared.sh
 # customization
 random_app_key=`openssl rand -hex 16`
 
+# generate .env file from .env.example
+if [ ! -f .env ]; then
+    cp .env.example .env
+    sedi "s/your_app_key/${random_app_key}/g" .env
+else
+    echo "Skipped creation of .env, delete the file and execute setup.sh again if you want a fresh one."
+fi
+
 # install composer dependencies
 composer install
 
-# generate .environment file from .environment.example
-if [ ! -f .environment ]; then
-    cp .environment.example .environment
-    sedi "s/your_app_key/${random_app_key}/g" .environment
-else
-    echo "Skipped creation of .environment, delete the file and execute setup.sh again if you want a fresh one."
-fi
-
 docker-compose up -d
 
-# custom project setup tasks
-if [ ! -f database/database.sqlite ]; then
-    composer run create-database
-fi
+sleep 8
+
+composer run create-database
 
 # create a new repository?
 echo "\n"

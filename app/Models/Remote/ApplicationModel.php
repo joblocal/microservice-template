@@ -2,7 +2,7 @@
 
 namespace App\Models\Remote;
 
-use \ArrayAccess;
+use ArrayAccess;
 
 class ApplicationModel implements ArrayAccess
 {
@@ -56,7 +56,8 @@ class ApplicationModel implements ArrayAccess
      * fills attributes
      *
      * @param array $attributes
-     * @return RemotePublication
+     *
+     * @return $this
      */
     public function fill(array $attributes)
     {
@@ -66,6 +67,7 @@ class ApplicationModel implements ArrayAccess
 
         return $this;
     }
+
     /**
      * Dynamically get attributes
      *

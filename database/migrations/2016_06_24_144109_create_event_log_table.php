@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateEventLogTable extends Migration
 {
@@ -17,7 +17,7 @@ class CreateEventLogTable extends Migration
             $table->text('payload');
             $table->string('publication_id');
             $table->string('subject');
-            $table->date('event_at');
+            $table->datetime('event_at');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateEventLogTable extends Migration
      */
     public function down()
     {
-        Schema::drop('event_log');
+        Schema::drop('event_logs');
     }
 }
