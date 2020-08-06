@@ -37,17 +37,17 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'table'  => 'jobs',
-            'queue'  => 'default',
+            'table' => 'jobs',
+            'queue' => 'default',
             'expire' => 60,
         ],
-        
-        'sns-sqs' => [
-            'driver' => 'sns-sqs',
-            'key'    => env('AWS_ACCESS_KEY_ID', 'your-access-key-id'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY', 'your-secret-access-key'),
-            'queue'  => env('QUEUE_URL', 'your-queue-url'),
-            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+
+        'sqs-sns' => [
+            'driver' => 'sqs-sns',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'queue' => env('QUEUE_URL'),
+            'region' => env('AWS_DEFAULT_REGION', 'eu-west-1'),
         ],
 
     ],
