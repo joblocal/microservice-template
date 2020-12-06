@@ -15,8 +15,8 @@
 
 use Illuminate\Contracts\Routing\Registrar;
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', function () {
+    return app()->version();
 });
 
 $router->get('/status', function () {
