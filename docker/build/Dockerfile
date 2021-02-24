@@ -1,1 +1,1 @@
-FROM joblocal/base-build:alpine-3.12
+FROM joblocal/base-build:alpine-3.13

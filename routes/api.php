@@ -13,23 +13,21 @@
 
 /** @var Registrar $router */
 
+use App\Http\Controllers\V1\ExampleController;
 use Illuminate\Contracts\Routing\Registrar;
 
-$router->get('/', function () {
+Route::get('/', function () {
     return app()->version();
 });
 
-$router->get('/status', function () {
-    return response()->json(['message' => 'alive']);
+Route::get('/status', function () {
+    return ['message' => 'alive'];
 });
 
-$router->group([
+Route::group([
     'prefix' => 'v4',
     'namespace' => 'V1',
     'middleware' => App\Http\Middleware\ArrayParserMiddleware::class,
-], function () use ($router) {
-    $router->get('example', [
-        'as' => 'example',
-        'uses' => 'ExampleController@action',
-    ]);
+], function () {
+    Route::get('/example', [ExampleController::class, 'action']);
 });
