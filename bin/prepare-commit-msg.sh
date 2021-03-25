@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
 SHA1=$3

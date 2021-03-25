@@ -1,17 +1,17 @@
 <?php
 
-namespace joblocal\searchservice\database\seeds;
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeders.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // $this->call('UsersTableSeeder');
     }

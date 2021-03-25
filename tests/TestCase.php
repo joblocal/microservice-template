@@ -6,20 +6,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Laravel\Lumen\Application;
-use Laravel\Lumen\Testing\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * Creates the application.
-     *
-     * @return Application
-     */
-    public function createApplication()
-    {
-        return require __DIR__ . '/../bootstrap/app.php';
-    }
+    use CreatesApplication;
+    use DatabaseTransactions;
 
     /**
      * mocks the result of a remote api GET request
@@ -43,12 +36,12 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * stubs remote api response
-     * @return [array] mock data as array
+     * @return array mock data as array
      */
     protected function getStubRemoteApi()
     {
         $jsonFilePath = __DIR__ . '/Models/Remote/mocks/apiStub.json';
 
-        return json_decode(file_get_contents($jsonFilePath), true);
+        return json_decode(file_get_contents($jsonFilePath), true, 512, JSON_THROW_ON_ERROR);
     }
 }

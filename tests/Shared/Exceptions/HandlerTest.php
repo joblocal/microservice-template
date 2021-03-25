@@ -17,10 +17,10 @@ class HandlerTest extends TestCase
     {
         $exception = new Exception('test exception', 123);
         $request = new Request();
-        $handler = new Handler();
+        $handler = resolve(Handler::class);
 
         $result = $handler->render($request, $exception);
-        $this->assertEquals([
+        self::assertEquals([
             'errors' => [
                 [
                     'status' => 500,
@@ -40,10 +40,10 @@ class HandlerTest extends TestCase
             ->getMock();
         $exception = new ValidationException($validator);
         $request = new Request(['first' => 'value']);
-        $handler = new Handler();
+        $handler = resolve(Handler::class);
 
         $result = $handler->render($request, $exception);
-        $this->assertEquals([
+        self::assertEquals([
             'errors' => [
                 [
                     'status' => '422',
@@ -74,11 +74,11 @@ class HandlerTest extends TestCase
             ->getMock();
         $request = new Request(['nested_param' => 'value']);
         $exception = new ResourceValidationException($validator);
-        $handler = new Handler();
+        $handler = resolve(Handler::class);
 
         $result = $handler->render($request, $exception);
 
-        $this->assertEquals([
+        self::assertEquals([
             'errors' => [
                 [
                     'status' => '422',

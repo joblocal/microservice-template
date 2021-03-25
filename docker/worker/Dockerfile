@@ -1,1 +1,3 @@
-FROM joblocal/base-worker:alpine-3.9
+FROM joblocal/base-worker:alpine-3.13
+
+WORKDIR /var/www

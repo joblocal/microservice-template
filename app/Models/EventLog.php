@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -31,6 +32,8 @@ use Illuminate\Support\Carbon;
  */
 class EventLog extends Model
 {
+    use HasFactory;
+
     public const SUBJECT_CREATED = 'created';
     public const SUBJECT_DELETED = 'deleted';
 

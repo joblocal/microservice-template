@@ -1,6 +1,6 @@
 # Microservice Template
 
-This project provides a generic structure for setting up Microservices with [Lumen](https://lumen.laravel.com/).
+This project provides a generic structure for setting up Microservices with [Laravel](https://laravel.com/).
 By default the project uses a Queuing-System to handle asynchronous jobs.
 
 ## Requirements
@@ -64,8 +64,8 @@ You can also use the combined script by using `composer run confirm`.
 
 ## Technologies used
 
--   PHP 7.2
--   [Lumen Framework Documentation](http://lumen.laravel.com/docs)
+-   PHP 8.0
+-   [Laravel Framework Documentation](https://laravel.com/docs)
 -   [Docker](https://docs.docker.com)
 -   [Sentry](https://docs.sentry.io)
 

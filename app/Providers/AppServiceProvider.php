@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Aws\CloudWatch\CloudWatchClient;
 use Illuminate\Support\ServiceProvider;
 use Validator;
 
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(CloudWatchClient::class, function ($app) {
+            return $app->make('aws')->createCloudWatch();
+        });
     }
 }

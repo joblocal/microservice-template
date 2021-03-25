@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: ./docker/app
-    image: joblocal/base-app:latest
+    image: app:latest
     container_name: app.microservice.internal
     working_dir: /var/www
     volumes:
@@ -17,7 +17,7 @@ services:
   worker:
     build:
       context: ./docker/worker
-    image: joblocal/base-worker:latest
+    image: worker:latest
     container_name: worker.microservice.internal
     working_dir: /var/www
     volumes:
@@ -33,9 +33,9 @@ services:
     ports:
       - "11211:11211"
   db:
-    image: mysql:5
+    image: mysql:8
     container_name: db.microservice.internal
-    command: mysqld --sql_mode=""
+    command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3306:3306"
     environment:
