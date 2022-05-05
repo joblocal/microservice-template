@@ -34,10 +34,7 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true,
-    "allow-plugins": {
-      "isaac/composer-git-hooks": false
-    }
+    "sort-packages": true
   },
   "repositories": [
     {
