@@ -24,6 +24,8 @@ return [
     | is used by your application. A default configuration has been added
     | for each back-end shipped with Laravel. You are free to add more.
     |
+    | Drivers: "sync", "database", "beanstalkd", "sqs", "redis", "null"
+    |
     */
 
     'connections' => [
@@ -34,9 +36,10 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'table'  => 'jobs',
-            'queue'  => 'default',
-            'expire' => 60,
+            'table' => 'jobs',
+            'queue' => 'default',
+            'retry_after' => 90,
+            'after_commit' => false,
         ],
 
         'sns-sqs' => [

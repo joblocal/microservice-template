@@ -13,30 +13,38 @@
     "php": "^8.0",
     "ext-json": "*",
     "ext-pdo": "*",
-    "fideloper/proxy": "^4.4",
-    "fruitcake/laravel-cors": "^2.0",
-    "guzzlehttp/guzzle": "^7.0.1",
-    "laravel/framework": "^8.12",
-    "laravel/tinker": "^2.5",
+    "fruitcake/laravel-cors": "^3.0",
+    "guzzlehttp/guzzle": "^7.2",
+    "laravel/framework": "^9.11",
+    "laravel/tinker": "^2.7",
     "aws/aws-sdk-php-laravel": "^3.5",
     "sentry/sentry-laravel": "^2.2"
   },
   "require-dev": {
-    "facade/ignition": "^2.5",
-    "fakerphp/faker": "^1.9.1",
-    "mockery/mockery": "^1.4.2",
-    "nunomaduro/collision": "^5.0",
-    "phpunit/phpunit": "^9.3.3",
-    "roave/security-advisories": "dev-master",
     "barryvdh/laravel-ide-helper": "^2.8",
-    "brainmaestro/composer-git-hooks": "^2.8",
-    "squizlabs/php_codesniffer": "^3.5"
+    "fakerphp/faker": "^1.9.1",
+    "mockery/mockery": "^1.4.4",
+    "nunomaduro/collision": "^6.1",
+    "phpunit/phpunit": "^9.5.10",
+    "roave/security-advisories": "dev-master",
+    "spatie/laravel-ignition": "^1.0",
+    "squizlabs/php_codesniffer": "^3.5",
+    "brainmaestro/composer-git-hooks": "dev-prepare-for-symfony-6"
   },
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "isaac/composer-git-hooks": false
+    }
   },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/Jubeki/composer-git-hooks"
+    }
+  ],
   "extra": {
     "laravel": {
       "dont-discover": []
@@ -63,12 +71,10 @@
   "scripts": {
     "post-install-cmd": [
       "@composer run install-prepare-commit-msg-hook",
-      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-      "vendor/bin/cghooks add --ignore-lock"
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ],
     "post-update-cmd": [
       "@composer run install-prepare-commit-msg-hook",
-      "vendor/bin/cghooks update",
       "@php artisan ide-helper:generate",
       "@php artisan ide-helper:meta"
     ],

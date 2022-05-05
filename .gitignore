@@ -1,6 +1,7 @@
 /vendor
 /database/database.sqlite
 /.idea
+/.vscode
 .env
 .phpunit.result.cache
 cghooks.lock
