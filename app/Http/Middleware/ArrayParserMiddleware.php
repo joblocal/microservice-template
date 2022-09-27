@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 
 class ArrayParserMiddleware
 {
@@ -74,6 +74,7 @@ class ArrayParserMiddleware
         ]);
 
         $request->merge($data);
+
         return $next($request);
     }
 
@@ -86,7 +87,7 @@ class ArrayParserMiddleware
                     $data[$key] = $this->parseData($data[$key], $param);
                 }
             } else {
-                if (array_key_exists($param, $data) && !is_array($data[$param])) {
+                if (array_key_exists($param, $data) && ! is_array($data[$param])) {
                     $data[$param] = explode(',', $data[$param]);
                 }
             }
