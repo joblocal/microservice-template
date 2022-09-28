@@ -40,8 +40,9 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Throwable $exception
+     * @param  Throwable  $exception
      * @return void
+     *
      * @throws Throwable
      */
     public function report(Throwable $exception)
@@ -56,9 +57,10 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
-     * @param Throwable $exception
+     * @param  Request  $request
+     * @param  Throwable  $exception
      * @return Response
+     *
      * @throws Throwable
      */
     public function render($request, Throwable $exception)
@@ -71,10 +73,10 @@ class Handler extends ExceptionHandler
             foreach ($exception->validator->errors()->getMessages() as $field => $messages) {
                 foreach ($messages as $message) {
                     $error = [
-                        'status' => (string)$statusCode,
+                        'status' => (string) $statusCode,
                         'title' => 'Invalid Parameter',
                         'source' => [
-                            'parameter' => $field
+                            'parameter' => $field,
                         ],
                         'detail' => $message,
                     ];

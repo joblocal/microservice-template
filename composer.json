@@ -22,14 +22,14 @@
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8",
+    "brainmaestro/composer-git-hooks": "dev-prepare-for-symfony-6",
     "fakerphp/faker": "^1.9.1",
+    "laravel/pint": "^1.2",
     "mockery/mockery": "^1.4.4",
     "nunomaduro/collision": "^6.1",
     "phpunit/phpunit": "^9.5.10",
     "roave/security-advisories": "dev-master",
-    "spatie/laravel-ignition": "^1.0",
-    "squizlabs/php_codesniffer": "^3.5",
-    "brainmaestro/composer-git-hooks": "dev-prepare-for-symfony-6"
+    "spatie/laravel-ignition": "^1.0"
   },
   "config": {
     "optimize-autoloader": true,
@@ -87,7 +87,7 @@
       "cp bin/prepare-commit-msg.sh .git/hooks/prepare-commit-msg",
       "chmod a+x .git/hooks/prepare-commit-msg"
     ],
-    "lint": "./vendor/bin/phpcs --standard=phpcs.xml --colors -p .",
+    "lint": "./vendor/bin/pint --test",
     "test": [
       "docker-compose -f docker-compose-test.yml up -d",
       "sleep 8",

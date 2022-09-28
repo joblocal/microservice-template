@@ -20,7 +20,7 @@ abstract class TestCase extends BaseTestCase
     protected function mockRemoteApi(): void
     {
         $this->app->bind('guzzle', function () {
-            $jsonFilePath = __DIR__ . '/Models/Remote/mocks/apiStub.json';
+            $jsonFilePath = __DIR__.'/Models/Remote/mocks/apiStub.json';
             $jsonResponse = file_get_contents($jsonFilePath);
 
             $mock = new MockHandler([
@@ -36,11 +36,12 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * stubs remote api response
+     *
      * @return array mock data as array
      */
     protected function getStubRemoteApi()
     {
-        $jsonFilePath = __DIR__ . '/Models/Remote/mocks/apiStub.json';
+        $jsonFilePath = __DIR__.'/Models/Remote/mocks/apiStub.json';
 
         return json_decode(file_get_contents($jsonFilePath), true, 512, JSON_THROW_ON_ERROR);
     }
